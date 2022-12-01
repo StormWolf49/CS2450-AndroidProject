@@ -2,13 +2,14 @@ package com.example.cs2450_androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.Button;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // the scroll wheel that lets you select how many cards to play with
     private NumberPicker mPairNumPicker;
@@ -41,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         // start button handling
         mStartButton = (Button) findViewById(R.id.startBtn);
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View btn) {
-                String debugString = "current value: " + mNewGamePairAmount;
-                Log.d("MainActivity", debugString);
-            }
-        });
+        mStartButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View btn) {
+        String debugString = "current value: " + mNewGamePairAmount;
+        Log.d("MainActivity", debugString);
+        Intent newGameIntent = new Intent(this, GameActivity.class);
+        startActivity(newGameIntent);
     }
 }
