@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/card_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CFCFCF"
+        android:gravity="center"
+        android:text="default"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/card_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D64545"
+        android:gravity="center"
+        android:text="@string/card_back"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/flip_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:visibility="visible" />
+
+</merge>

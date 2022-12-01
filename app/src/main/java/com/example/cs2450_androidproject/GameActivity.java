@@ -4,8 +4,12 @@ import android.app.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
+import android.util.AttributeSet;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
     @Override
@@ -13,11 +17,6 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
-
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.fragmentContainerView, CardFragment.class, null)
-                .commit();
     }
 }
 

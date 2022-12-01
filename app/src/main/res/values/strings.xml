@@ -5,4 +5,5 @@
     <string name="music">Music</string>
     <string name="try_again">TRY AGAIN</string>
     <string name="num_cards_prompt">Number of Pairs</string>
+    <string name="card_back">\?\?\?</string>
 </resources>
