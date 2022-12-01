@@ -12,11 +12,17 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
+    GameCard mTestCard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
+
+        mTestCard = (GameCard) findViewById(R.id.testCard);
+
+        mTestCard.setText("bitch");
     }
 }
 

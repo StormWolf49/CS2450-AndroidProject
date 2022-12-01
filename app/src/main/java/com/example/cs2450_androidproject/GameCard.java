@@ -65,4 +65,9 @@ public class GameCard extends FrameLayout {
             }
         });
     }
+
+    public void setText(String newText) {
+        mCardText = newText;
+        mCardFront.setText(newText);
+    }
 }
