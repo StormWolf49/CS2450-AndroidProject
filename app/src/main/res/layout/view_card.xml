@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:background="#CFCFCF"
         android:gravity="center"
+        android:padding="16dp"
         android:text="default"
         android:textAlignment="center" />
 
@@ -18,6 +19,7 @@
         android:layout_height="match_parent"
         android:background="#D64545"
         android:gravity="center"
+        android:padding="16dp"
         android:text="@string/card_back"
         android:textAlignment="center" />
 
