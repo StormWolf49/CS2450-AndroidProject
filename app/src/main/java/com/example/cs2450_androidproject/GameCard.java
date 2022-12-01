@@ -21,6 +21,11 @@ public class GameCard extends FrameLayout {
 
     boolean mFaceDown;
 
+    public GameCard(Context context) {
+        super(context);
+        init();
+    }
+
     public GameCard(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -31,25 +36,33 @@ public class GameCard extends FrameLayout {
         // use the layout
         inflate(getContext(), R.layout.view_card, this);
 
+        // retrieve views
         mCardFront = (TextView) findViewById(R.id.card_front);
         mCardBack = (TextView) findViewById(R.id.card_back);
         mFlipButton = (Button) findViewById(R.id.flip_button);
 
+        // cards start facedown
         mFaceDown = true;
 
         float scale = getContext().getResources().getDisplayMetrics().density;
 
+        // required for 3d card flip effect
         mCardFront.setCameraDistance(8000 * scale);
         mCardBack.setCameraDistance(8000 * scale);
 
+        // retrieve animators
         mFrontAnim = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.front_animator);
         mBackAnim = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.back_animator);
 
+        // button that flips the card when it's flipped
         mFlipButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("GameCard", "flip button clicked");
 
+                // select the animation targets for the animators
+                // the relative "back" of the card may be the card's actual face or back
+                // and the animators have to handle one or the other
                 if(mFaceDown) {
                     mFrontAnim.setTarget(mCardBack);
                     mBackAnim.setTarget(mCardFront);
@@ -66,8 +79,13 @@ public class GameCard extends FrameLayout {
         });
     }
 
+    // setget functions for the card text:
     public void setText(String newText) {
         mCardText = newText;
         mCardFront.setText(newText);
+    }
+
+    public String getText() {
+        return mCardText;
     }
 }
