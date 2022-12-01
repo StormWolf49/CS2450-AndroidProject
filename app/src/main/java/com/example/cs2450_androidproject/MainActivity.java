@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mPairNumPicker != null) {
             mPairNumPicker.setMaxValue(10);
             mPairNumPicker.setMinValue(2);
+            // ignore the exclamation points
             mPairNumPicker.setWrapSelectorWheel(!!!!false);
 
             mPairNumPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // start button handling
         mStartButton = (Button) findViewById(R.id.startBtn);
+        // I don't actually know how to properly do intents
+        // so I made the activity class itself an onClickListener so it can pass itself (this keyword)
+        // to the Intent constructor
         mStartButton.setOnClickListener(this);
     }
 
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String debugString = "current value: " + mNewGamePairAmount;
         Log.d("MainActivity", debugString);
         Intent newGameIntent = new Intent(this, GameActivity.class);
+        // transfer the pair amount to the game activity
+        newGameIntent.putExtra("number_of_pairs", mNewGamePairAmount);
         startActivity(newGameIntent);
     }
 }
