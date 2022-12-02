@@ -21,6 +21,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Timer;
 
@@ -35,6 +36,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Button endButton;
     private Button newGame;
+    private Button tryAgain;
 
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
@@ -166,10 +168,63 @@ public class GameActivity extends AppCompatActivity {
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishFromChild(getParent().getParent());
+                if (getParent() != null) {
+                    finishFromChild(getParent().getParent());
+                }
                 startActivity(newGameIntent);
             }
         });
+        //try again
+        tryAgain = (Button) findViewById(R.id.startBtn2);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*flip over all flipped cards that don't match
+                (not sure if this should count for all flipped cards or just the 2 most recently flipped)
+                (this implementation counts for all flipped cards)
+                put all face-up card values in an arraylist*/
+                ArrayList<String> faceUp = new ArrayList<String>();
+                for (int i = 0; i < numRows; i++) {
+                    for (int j = 0; j < numCols; j++) {
+                        if (!mCards[i][j].mFaceDown) {
+                            faceUp.add(mCards[i][j].getText());
+                        }
+                    }
+                }
+                if (faceUp.size() > 0) {
+                    //create and populate array to store the values of the face-up cards
+                    //(have to use an arraylist first to know how many cards are face up)
+                    String[] values = new String[faceUp.size()];
+                    for (int i = 0; i < faceUp.size(); i++) {
+                        values[i] = faceUp.get(i);
+                    }
+                    //check for matches
+                    //if a match is found, replace its string in the values array w/ "-1"
+                    //since "-1" shouldn't match any of the card values
+                    for (int i = 0; i < faceUp.size(); i++) {
+                        for (int j = 0; j < faceUp.size(); j++) {
+                            if (values[i].equals(values[j]) && i < j) {
+                                values[i] = "-1";
+                                values[j] = "-1";
+                            }
+                        }
+                    }
+                    //flip unmatched cards
+                    for (int i = 0; i < numRows; i++) {
+                        for (int j = 0; j < numCols; j++) {
+                            for (int r = 0; r < faceUp.size(); r++) {
+                                //if the value of the card matches one of the values in the value array
+                                //that card is not matched and should be flipped back over
+                                if (mCards[i][j].getText().equals(values[r]) && !mCards[i][j].mFaceDown){
+                                    mCards[i][j].mFlipButton.performClick();
+                                }
+                            }
+                        }
+                    }
+                }//if (faceUp.size() > 0) {
+            }//public void onClick(View v) {
+        });//tryAgain.setOnClickListener(new View.OnClickListener() {
+
     }
 }
 
