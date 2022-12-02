@@ -2,14 +2,26 @@ package com.example.cs2450_androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Button;
 import android.util.Log;
+import android.widget.Switch;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "MAIN";
 
     // the scroll wheel that lets you select how many cards to play with
     private NumberPicker mPairNumPicker;
@@ -18,6 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button mStartButton;
     private Button mLeaderboardButton;
+    private Switch mDebugSwitch;
+
+    private boolean inDebugMode = false;
+
+    private final String DEBUG_PASSWORD = "swingbeans";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +70,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLeaderboardButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent goToLeaderboardIntent = new Intent(view.getContext(), LeaderboardActivity.class);
-
+                goToLeaderboardIntent.putExtra("debug_mode", inDebugMode);
                 startActivity(goToLeaderboardIntent);
+            }
+        });
+
+        mDebugSwitch = (Switch) findViewById(R.id.debug_switch);
+        mDebugSwitch.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                if (!inDebugMode) {
+                    // ------------------ //
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Activate Debug Mode (Password)");
+
+                    View viewInflated = LayoutInflater.from(MainActivity.this).inflate(R.layout.fragment_userinputdialog,
+                            (ViewGroup) findViewById(android.R.id.content), false);
+
+                    // Set up the input
+                    final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+                    // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setPositiveButton("OK", null);
+                    builder.setNegativeButton("CANCEL", null);
+                    input.setBackgroundColor(TextInputLayout.BOX_BACKGROUND_NONE);
+                    builder.setView(viewInflated);
+
+                    final AlertDialog alertDialog = builder.create();
+
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(final DialogInterface dialog) {
+                            Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                            positiveButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (input.getText().toString().equals(DEBUG_PASSWORD)) {
+                                        //CLOSE DIALOG
+                                        inDebugMode = true;
+                                        Log.d(TAG, "Turned on Debug Mode");
+                                        dialog.dismiss();
+                                    } else {
+                                        input.setBackgroundColor(Color.parseColor("#ffffff"));
+                                        Log.e(TAG, "Password is: " + DEBUG_PASSWORD);
+                                        //DO NOT CLOSE DIALOG
+                                    }
+                                }
+                            });
+
+                            Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                            negativeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //CLOSE THE DIALOG
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                         @Override
+                                                         public void onDismiss(DialogInterface dialog) {
+                                                             if (!inDebugMode) {
+                                                                 mDebugSwitch.setChecked(false);
+                                                             }
+                                                         }
+                                                     }
+
+                    );
+
+                    alertDialog.show();
+
+                    // ------------------ //
+                }
+                else
+                {
+                    inDebugMode = false;
+                    Log.d(TAG, "Turned off Debug Mode");
+                }
             }
         });
     }
