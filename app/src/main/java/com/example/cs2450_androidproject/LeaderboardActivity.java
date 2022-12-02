@@ -52,10 +52,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         for(int i = 2; i <= 10; i++)
         {
             mListOfHighScores.add(new HighScoreManager(LeaderboardActivity.this, i));
-//            mListOfHighScores.get(i-2).fillWithDummyData();
-        }
 
-        Log.d(TAG, "what");
+            if(mListOfHighScores.get(i-2).getHighScores().size() == 0)
+            {
+                mListOfHighScores.get(i-2).fillWithDummyData();
+            }
+        }
 
         mHighScore1 = (TextView) findViewById(R.id.highScore1);
         mHighScore2 = (TextView) findViewById(R.id.highScore2);
@@ -70,14 +72,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         mTestBtn = (Button) findViewById(R.id.testBtn);
         mClearBtn = (Button) findViewById(R.id.clearBtn);
 
-        Log.d(TAG, "what");
-
         mLeaderboardSelect = 2; // defaults to 2 pairs, which is same default as scroll wheel
         mTitle.setText("# Of Pairs: " + mLeaderboardSelect + " / # Of Cards: " + mLeaderboardSelect*2);
 
         readThyFile(mListOfHighScores.get(mLeaderboardSelect-2).getHighScores());
-
-        Log.d(TAG, "what");
 
         if(mLeaderboardPicker != null) {
             mLeaderboardPicker.setMaxValue(10);

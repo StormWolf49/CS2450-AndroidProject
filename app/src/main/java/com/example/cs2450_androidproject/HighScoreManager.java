@@ -38,7 +38,6 @@ public class HighScoreManager
             mHighScores = mSerializer.loadHighScores();
         } catch (Exception e) {
             mHighScores = new ArrayList<HighScore>(5);
-            fillWithDummyData();
             Log.e(TAG, "Error loading crimes: ", e);
         }
     }
