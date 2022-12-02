@@ -37,6 +37,12 @@
             android:exported="false">
 
         </activity>
+
+        <activity
+            android:name=".GameOverActivity"
+            android:exported="false">
+
+        </activity>
     </application>
 
 </manifest>

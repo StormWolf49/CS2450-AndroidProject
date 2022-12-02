@@ -2,23 +2,25 @@ package com.example.cs2450_androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class LeaderboardActivity extends AppCompatActivity {
+
+    private static final String TAG = "Leaderboard";
 
     private NumberPicker mLeaderboardPicker;
     private TextView mTitle;
     private int mLeaderboardSelect;
 
-    private ArrayList<HighScoreManager> mListOfHighScores;
-    private HighScoreManager scores;
+    private static ArrayList<HighScoreManager> mListOfHighScores;
 
     private TextView mHighScore1;
     private TextView mHighScore2;
@@ -26,22 +28,25 @@ public class LeaderboardActivity extends AppCompatActivity {
     private TextView mHighScore4;
     private TextView mHighScore5;
 
+    private Button mBackFromLeaderBoardBtn;
+    private Button mTestBtn;
+    private Button mClearBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
         // Variables initialized here
         // number picker directly copied from MainActivity
         mListOfHighScores = new ArrayList<HighScoreManager>();
-        scores = new HighScoreManager(this, 0);
 
         for(int i = 2; i <= 10; i++)
         {
             mListOfHighScores.add(i-2, new HighScoreManager(LeaderboardActivity.this, i));
+//            dummyData(i-2);
         }
-
-        dummyData();
 
         mHighScore1 = (TextView) findViewById(R.id.highScore1);
         mHighScore2 = (TextView) findViewById(R.id.highScore2);
@@ -51,6 +56,10 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         mLeaderboardPicker = (NumberPicker) findViewById(R.id.leaderboardPicker);
         mTitle = (TextView) findViewById(R.id.leaderboardTitle);
+
+        mBackFromLeaderBoardBtn = (Button) findViewById(R.id.backFromLeaderboardBtn);
+        mTestBtn = (Button) findViewById(R.id.testBtn);
+        mClearBtn = (Button) findViewById(R.id.clearBtn);
 
         mLeaderboardSelect = 2; // defaults to 2 pairs, which is same default as scroll wheel
         mTitle.setText("# Of Pairs: " + mLeaderboardSelect + " / # Of Cards: " + mLeaderboardSelect*2);
@@ -71,6 +80,42 @@ public class LeaderboardActivity extends AppCompatActivity {
                 }
             });
         }
+
+        if(mBackFromLeaderBoardBtn != null)
+        {
+            mBackFromLeaderBoardBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+
+        if(mTestBtn != null)
+        {
+            mTestBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+                    Log.d(TAG, "Testing User Input");
+                    Intent goToGameOverIntent = new Intent(view.getContext(), GameOverActivity.class);
+                    goToGameOverIntent.putExtra("number_of_pairs", mLeaderboardSelect);
+                    goToGameOverIntent.putExtra("show_changeScoreBtn", true);
+                    startActivity(goToGameOverIntent);
+                }
+            });
+        }
+
+        if(mClearBtn != null)
+        {
+            mClearBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dummyData(mLeaderboardSelect-2);
+                    readThyFile(mListOfHighScores.get(mLeaderboardSelect-2).getHighScores());
+                }
+            });
+        }
     }
 
     @Override
@@ -82,15 +127,16 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     // Test file
-    public void dummyData()
+    public void dummyData(int num)
     {
-        for (int i = 0; i < mListOfHighScores.size(); i++)
-        {
-            for (int k = 0; k < 5; k++)
-            {
-                mListOfHighScores.get(i).addHighScore(new HighScore("AHH", i+1));
-            }
-        }
+        mListOfHighScores.get(num).clearHighScores();
+
+        mListOfHighScores.get(num).addHighScore(new HighScore("YAY", 4*num + 4));
+        mListOfHighScores.get(num).addHighScore(new HighScore("BOB", 2*num + 2));
+        mListOfHighScores.get(num).addHighScore(new HighScore("LOL", num+1));
+        mListOfHighScores.get(num).addHighScore(new HighScore("ABC", 0));
+        mListOfHighScores.get(num).addHighScore(new HighScore("ABC", 0));
+        mListOfHighScores.get(num).saveHighScores();
     }
 
     // Read file

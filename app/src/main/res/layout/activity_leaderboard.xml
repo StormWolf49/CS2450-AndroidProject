@@ -9,24 +9,22 @@
         android:id="@+id/leaderboardPicker"
         android:layout_width="63dp"
         android:layout_height="109dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/leaderboardTitle"
+        android:id="@+id/highScore2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="[TITLE REPLACED IN CODE]"
+        android:text="[REPLACED BY HIGHSCORE1]"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leaderboardPicker"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/highScore1"
+        app:layout_constraintVertical_bias="0.055" />
 
     <TextView
         android:id="@+id/highScore1"
@@ -36,31 +34,10 @@
         android:text="[REPLACED BY HIGHSCORE1]"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
-        app:layout_constraintVertical_bias="0.043" />
-
-    <TextView
-        android:id="@+id/highScore2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[REPLACED BY HIGHSCORE1]"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/highScore1"
-        app:layout_constraintVertical_bias="0.051" />
-
-    <TextView
-        android:id="@+id/highScore3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[REPLACED BY HIGHSCORE1]"
-        app:layout_constraintBottom_toTopOf="@+id/highScore4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/highScore2"
-        app:layout_constraintVertical_bias="0.425" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/highScore4"
@@ -70,9 +47,22 @@
         android:text="[REPLACED BY HIGHSCORE1]"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
-        app:layout_constraintVertical_bias="0.301" />
+        app:layout_constraintVertical_bias="0.335" />
+
+    <TextView
+        android:id="@+id/highScore3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toTopOf="@+id/highScore4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highScore2"
+        app:layout_constraintVertical_bias="0.425" />
 
     <TextView
         android:id="@+id/highScore5"
@@ -82,8 +72,58 @@
         android:text="[REPLACED BY HIGHSCORE1]"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
-        app:layout_constraintVertical_bias="0.379" />
+        app:layout_constraintVertical_bias="0.422" />
+
+    <TextView
+        android:id="@+id/leaderboardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="[TITLE REPLACED IN CODE]"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardPicker"
+        app:layout_constraintVertical_bias="0.005" />
+
+    <Button
+        android:id="@+id/clearBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CLEAR"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highScore5"
+        app:layout_constraintVertical_bias="0.616" />
+
+    <Button
+        android:id="@+id/testBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TEST INPUT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highScore5"
+        app:layout_constraintVertical_bias="0.616" />
+
+    <Button
+        android:id="@+id/backFromLeaderboardBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BACK"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.117"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.038" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

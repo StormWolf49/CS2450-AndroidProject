@@ -47,6 +47,11 @@ public class HighScoreManager
         mHighScores.add(s);
     }
 
+    public void clearHighScores()
+    {
+        mHighScores.clear();
+    }
+
     public ArrayList<HighScore> getHighScores()
     {
         return mHighScores;
@@ -56,7 +61,7 @@ public class HighScoreManager
     {
         try {
             mSerializer.saveScores(mHighScores);
-            Log.d(TAG, "scores saved to a file!");
+            Log.d(TAG, "scores saved to a file! File: " + INITIALFILENAME + fileNum + FILETYPE);
             return true;
         }
         catch (Exception e)
