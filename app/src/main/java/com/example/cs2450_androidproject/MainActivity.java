@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int mNewGamePairAmount;
 
     private Button mStartButton;
+    private Button mLeaderboardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // so I made the activity class itself an onClickListener so it can pass itself (this keyword)
         // to the Intent constructor
         mStartButton.setOnClickListener(this);
+
+        mLeaderboardButton = (Button) findViewById(R.id.leaderboardBtn);
+        mLeaderboardButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent goToLeaderboardIntent = new Intent(view.getContext(), LeaderboardActivity.class);
+
+                startActivity(goToLeaderboardIntent);
+            }
+        });
     }
 
     @Override
