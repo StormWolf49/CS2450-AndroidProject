@@ -20,7 +20,7 @@ public class HighScoreManager
     private static final String TAG = "Leaderboard";
     private static final String INITIALFILENAME = "leaderboard";
     private static final String FILETYPE = ".json";
-    private static int fileNum;
+    private int fileNum;
 
     private ArrayList<HighScore> mHighScores;
     private LeaderboardIntentJSONSerializer mSerializer;
@@ -38,8 +38,22 @@ public class HighScoreManager
             mHighScores = mSerializer.loadHighScores();
         } catch (Exception e) {
             mHighScores = new ArrayList<HighScore>(5);
+            fillWithDummyData();
             Log.e(TAG, "Error loading crimes: ", e);
         }
+    }
+
+    public void fillWithDummyData()
+    {
+        if(mHighScores.size() == 0) { clearHighScores(); }
+
+        addHighScore(new HighScore("LOL", fileNum*4 + 4));
+        addHighScore(new HighScore("BOB", fileNum*2 + 2));
+        addHighScore(new HighScore("NOO", fileNum + 1));
+        addHighScore(new HighScore("ABC", 1));
+        addHighScore(new HighScore("ABC", 0));
+
+        saveHighScores();
     }
 
     public void addHighScore(HighScore s)

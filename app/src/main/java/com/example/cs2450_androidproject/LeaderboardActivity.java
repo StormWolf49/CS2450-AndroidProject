@@ -2,11 +2,16 @@ package com.example.cs2450_androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -32,6 +37,8 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Button mTestBtn;
     private Button mClearBtn;
 
+    private int mScore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,13 +47,15 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         // Variables initialized here
         // number picker directly copied from MainActivity
-        mListOfHighScores = new ArrayList<HighScoreManager>();
+        mListOfHighScores = new ArrayList<HighScoreManager>(8);
 
         for(int i = 2; i <= 10; i++)
         {
-            mListOfHighScores.add(i-2, new HighScoreManager(LeaderboardActivity.this, i));
-//            dummyData(i-2);
+            mListOfHighScores.add(new HighScoreManager(LeaderboardActivity.this, i));
+//            mListOfHighScores.get(i-2).fillWithDummyData();
         }
+
+        Log.d(TAG, "what");
 
         mHighScore1 = (TextView) findViewById(R.id.highScore1);
         mHighScore2 = (TextView) findViewById(R.id.highScore2);
@@ -61,9 +70,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         mTestBtn = (Button) findViewById(R.id.testBtn);
         mClearBtn = (Button) findViewById(R.id.clearBtn);
 
+        Log.d(TAG, "what");
+
         mLeaderboardSelect = 2; // defaults to 2 pairs, which is same default as scroll wheel
         mTitle.setText("# Of Pairs: " + mLeaderboardSelect + " / # Of Cards: " + mLeaderboardSelect*2);
+
         readThyFile(mListOfHighScores.get(mLeaderboardSelect-2).getHighScores());
+
+        Log.d(TAG, "what");
 
         if(mLeaderboardPicker != null) {
             mLeaderboardPicker.setMaxValue(10);
@@ -98,10 +112,50 @@ public class LeaderboardActivity extends AppCompatActivity {
                 public void onClick(View view)
                 {
                     Log.d(TAG, "Testing User Input");
-                    Intent goToGameOverIntent = new Intent(view.getContext(), GameOverActivity.class);
-                    goToGameOverIntent.putExtra("number_of_pairs", mLeaderboardSelect);
-                    goToGameOverIntent.putExtra("show_changeScoreBtn", true);
-                    startActivity(goToGameOverIntent);
+
+                    // ------------------ //
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LeaderboardActivity.this);
+                    builder.setTitle("Manuel Score Input (For Debugging Only)");
+
+                    // Set up the input
+                    final EditText input = new EditText(LeaderboardActivity.this);
+                    // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setView(input);
+
+                    // Set up the buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            try
+                            {
+                                mScore = (int) Integer.parseInt(input.getText().toString());
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                mScore = 0;
+                                Log.e(TAG, "Error : Test Input Button User Input : " + e);
+                                Log.e(TAG, "mScore variable defaulted to 0");
+                            }
+
+                            Intent goToGameOverIntent = new Intent(view.getContext(), GameOverActivity.class);
+                            goToGameOverIntent.putExtra("number_of_pairs", mLeaderboardSelect);
+                            goToGameOverIntent.putExtra("user_score", mScore);
+                            startActivity(goToGameOverIntent);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+
+                    // ------------------ //
                 }
             });
         }
@@ -111,7 +165,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             mClearBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dummyData(mLeaderboardSelect-2);
+
+                    mListOfHighScores.get(mLeaderboardSelect-2).fillWithDummyData();
                     readThyFile(mListOfHighScores.get(mLeaderboardSelect-2).getHighScores());
                 }
             });
@@ -124,19 +179,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onPause();
         // If 2 is selected, it is mListOfHighScores.get(0);
         mListOfHighScores.get(mLeaderboardSelect-2).saveHighScores();
-    }
-
-    // Test file
-    public void dummyData(int num)
-    {
-        mListOfHighScores.get(num).clearHighScores();
-
-        mListOfHighScores.get(num).addHighScore(new HighScore("YAY", 4*num + 4));
-        mListOfHighScores.get(num).addHighScore(new HighScore("BOB", 2*num + 2));
-        mListOfHighScores.get(num).addHighScore(new HighScore("LOL", num+1));
-        mListOfHighScores.get(num).addHighScore(new HighScore("ABC", 0));
-        mListOfHighScores.get(num).addHighScore(new HighScore("ABC", 0));
-        mListOfHighScores.get(num).saveHighScores();
     }
 
     // Read file
