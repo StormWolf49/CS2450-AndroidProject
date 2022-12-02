@@ -28,4 +28,62 @@
         app:layout_constraintTop_toBottomOf="@+id/leaderboardPicker"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/highScore1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
+        app:layout_constraintVertical_bias="0.043" />
+
+    <TextView
+        android:id="@+id/highScore2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highScore1"
+        app:layout_constraintVertical_bias="0.051" />
+
+    <TextView
+        android:id="@+id/highScore3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toTopOf="@+id/highScore4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highScore2"
+        app:layout_constraintVertical_bias="0.425" />
+
+    <TextView
+        android:id="@+id/highScore4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
+        app:layout_constraintVertical_bias="0.301" />
+
+    <TextView
+        android:id="@+id/highScore5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="[REPLACED BY HIGHSCORE1]"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardTitle"
+        app:layout_constraintVertical_bias="0.379" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
