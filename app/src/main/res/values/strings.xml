@@ -7,5 +7,9 @@
     <string name="num_cards_prompt">Number of Pairs</string>
     <string name="card_back">\?\?\?</string>
     <string name="alertTitle">Save Prompt</string>
-    <string name="alertText">Game Over!\nSave your score?</string>
+    <string name="alertText">Save your score?</string>
+    <string name="save_score_prompt">Enter your name here</string>
+    <string name="game_over">Game Over</string>
+    <string name="save_button">Save</string>
+    <string name="skip_saving">Skip</string>
 </resources>

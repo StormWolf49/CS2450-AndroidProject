@@ -145,14 +145,13 @@ public class GameActivity extends AppCompatActivity {
                 CountDownTimer timer = new CountDownTimer(5000,1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-
+                        //doesn't need to do anything but needs to be here for the timer to work
                     }
 
                     @Override
                     public void onFinish() {
                         //alert dialog to prompt for saving to high scores
                         //in practice would only be called if the player actually got a high score
-                        //and would lead to a name/initial input screen
                         FragmentManager fm = getFragmentManager();
                         alertDialogFragment hsPrompt = new alertDialogFragment();
                         hsPrompt.show(getSupportFragmentManager(), "hsPrompt");
