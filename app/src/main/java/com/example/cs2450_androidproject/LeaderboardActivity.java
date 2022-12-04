@@ -40,7 +40,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Button mTestBtn;
     private Button mClearBtn;
 
-    private boolean inDebugMode;
+    private boolean mInDebugMode;
 
     private int mScore;
 
@@ -54,7 +54,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         // number picker directly copied from MainActivity
         if(savedInstanceState == null)
         {
-            inDebugMode = getIntent().getBooleanExtra("debug_mode", false);
+            mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
         }
 
         mListOfHighScores = new ArrayList<HighScoreManager>(8);
@@ -82,7 +82,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         mTestBtn = (Button) findViewById(R.id.testBtn);
         mClearBtn = (Button) findViewById(R.id.clearBtn);
 
-        if(!inDebugMode)
+        if(!mInDebugMode)
         {
             mTestBtn.setVisibility(View.INVISIBLE);
             mClearBtn.setVisibility(View.INVISIBLE);
@@ -125,16 +125,12 @@ public class LeaderboardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view)
                 {
-                    Log.d(TAG, "Testing User Input");
-
                     // ------------------ //
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(LeaderboardActivity.this);
                     builder.setTitle("Manuel Score Input");
-
-
                     View viewInflated = LayoutInflater.from(LeaderboardActivity.this).inflate(R.layout.fragment_userinputdialog,
-                                        (ViewGroup) findViewById(android.R.id.content), false);
+                            (ViewGroup) findViewById(android.R.id.content), false);
 
                     // Set up the input
                     final EditText input = (EditText) viewInflated.findViewById(R.id.input);
@@ -164,7 +160,8 @@ public class LeaderboardActivity extends AppCompatActivity {
                                 Log.e(TAG, "mScore variable defaulted to 0");
                             }
 
-                            Intent goToGameOverIntent = new Intent(view.getContext(), GameOverActivity.class);
+                            Intent goToGameOverIntent = new Intent(LeaderboardActivity.this, GameOverActivity.class);
+                            goToGameOverIntent.putExtra("debug_mode", mInDebugMode);
                             goToGameOverIntent.putExtra("number_of_pairs", mLeaderboardSelect);
                             goToGameOverIntent.putExtra("user_score", mScore);
                             startActivity(goToGameOverIntent);
@@ -176,10 +173,10 @@ public class LeaderboardActivity extends AppCompatActivity {
                             dialog.cancel();
                         }
                     });
-
-                    builder.show();
-
                     // ------------------ //
+
+                    Log.d(TAG, "Testing User Input");
+                    builder.show();
                 }
             });
         }
@@ -205,7 +202,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         mListOfHighScores.get(mLeaderboardSelect-2).saveHighScores();
     }
 
-    public ArrayList<HighScoreManager> getListOfHighScores()
+    public static ArrayList<HighScoreManager> getListOfHighScores()
     {
         return mListOfHighScores;
     }

@@ -44,7 +44,7 @@ public class HighScoreManager
 
     public void fillWithDummyData()
     {
-        if(mHighScores.size() == 0) { clearHighScores(); }
+        clearHighScores();
 
         addHighScore(new HighScore("LOL", fileNum*4 + 4));
         addHighScore(new HighScore("BOB", fileNum*2 + 2));
@@ -58,6 +58,38 @@ public class HighScoreManager
     public void addHighScore(HighScore s)
     {
         mHighScores.add(s);
+    }
+
+    public boolean checkScore(int s)
+    {
+        for(int n = 0; n < mHighScores.size(); n++)
+        {
+            if(mHighScores.get(n).getScore() < s)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void addHighScore(int s, String initials)
+    {
+        //goes through highScore ArrayList (redundancy for inquiryForUser method).
+        for(int n = 0; n < mHighScores.size(); n++)
+        {
+            if(mHighScores.get(n).getScore() < s)
+            {
+                //should set new highScore at current loop iteration.
+                mHighScores.set(n, new HighScore(initials, s));
+
+                break;
+            }
+
+        }
+
+        saveHighScores();
+        Log.d(TAG, "Successfully inputted score.");
     }
 
     public void clearHighScores()
