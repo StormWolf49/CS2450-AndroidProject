@@ -31,6 +31,10 @@ public class GameActivity extends AppCompatActivity {
 
     private TableLayout mGameTable;
     private GameCard[][] mCards;
+    static int clicked;
+    static String[] last2Values;
+    static boolean fromTryAgain;
+    static boolean fromEndGame;
 
     private ArrayList<String> mPossibleWords;
 
@@ -53,6 +57,12 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        fromEndGame = false;
+        fromTryAgain = false;
+        clicked = 0;
+        last2Values = new String[2];
+        last2Values[0] = "-1";
+        last2Values[1] = "-2";
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
@@ -133,6 +143,7 @@ public class GameActivity extends AppCompatActivity {
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fromEndGame = true;
                 //flip over all unflipped cards
                 for (int i = 0; i < numRows; i++) {
                     for (int j = 0; j < numCols; j++) {
@@ -141,6 +152,12 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                 }
+                //reset click tracking
+                fromEndGame = false;
+                fromTryAgain = false;
+                clicked = 0;
+                last2Values[0] = "-1";
+                last2Values[1] = "-2";
                 //timer to wait a few seconds before prompting to save score
                 CountDownTimer timer = new CountDownTimer(5000,1000) {
                     @Override
@@ -167,6 +184,12 @@ public class GameActivity extends AppCompatActivity {
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //reset click tracking
+                fromEndGame = false;
+                fromTryAgain = false;
+                clicked = 0;
+                last2Values[0] = "-1";
+                last2Values[1] = "-2";
                 if (getParent() != null) {
                     finishFromChild(getParent().getParent());
                 }
@@ -178,6 +201,7 @@ public class GameActivity extends AppCompatActivity {
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fromTryAgain = true;
                 /*flip over all flipped cards that don't match
                 (not sure if this should count for all flipped cards or just the 2 most recently flipped)
                 (this implementation counts for all flipped cards)
@@ -221,9 +245,14 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                 }//if (faceUp.size() > 0) {
+                //reset click tracking
+                fromEndGame = false;
+                fromTryAgain = false;
+                clicked = 0;
+                last2Values[0] = "-1";
+                last2Values[1] = "-2";
             }//public void onClick(View v) {
         });//tryAgain.setOnClickListener(new View.OnClickListener() {
-
     }
 }
 
