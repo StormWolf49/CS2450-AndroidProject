@@ -16,7 +16,7 @@ public class AudioPlayer {
     }
 
     public void play(Context c){
-        memoryPlayer = MediaPlayer.create(c,testUri);
+        memoryPlayer = MediaPlayer.create(c,R.raw.sweet_kahoot_dreams);
         memoryPlayer.start();
     }
 }

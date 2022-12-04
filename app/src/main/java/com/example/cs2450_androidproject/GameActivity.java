@@ -15,6 +15,7 @@ import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TableLayout;
@@ -260,19 +261,18 @@ public class GameActivity extends AppCompatActivity {
             }//public void onClick(View v) {
         });//tryAgain.setOnClickListener(new View.OnClickListener() {
 
-        mMusicSwitch.setOnClickListener(new View.OnClickListener(){
+        mMusicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View myVoice) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(mMusicSwitch.isChecked())
                 {
-                    myAudioPlayer.stop();
-                    mMusicSwitch.setChecked(false);
+                    myAudioPlayer.play(getApplicationContext());
                 }
 
                 else
                 {
-                    myAudioPlayer.play(getApplicationContext());
-                    mMusicSwitch.setChecked(true);
+
+                    myAudioPlayer.stop();
                 }
             }
         });
