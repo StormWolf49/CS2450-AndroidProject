@@ -267,11 +267,11 @@ public class GameActivity extends AppCompatActivity {
                 if(mMusicSwitch.isChecked())
                 {
                     myAudioPlayer.play(getApplicationContext());
+
                 }
 
                 else
                 {
-
                     myAudioPlayer.stop();
                 }
             }
