@@ -62,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //reset click tracking
         fromEndGame = false;
         fromTryAgain = false;
         clicked = 0;
@@ -78,7 +79,9 @@ public class GameActivity extends AppCompatActivity {
 
         mTestCard = (GameCard) findViewById(R.id.testCard);
         mMusicSwitch = (Switch) findViewById(R.id.musicSwitch);
-
+        //reset music switch
+        myAudioPlayer.stop();
+        mMusicSwitch.setChecked(false);
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -174,6 +177,9 @@ public class GameActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
+                        //stop music after timer ends
+                        myAudioPlayer.stop();
+                        mMusicSwitch.setChecked(false);
                         //alert dialog to prompt for saving to high scores
                         //in practice would only be called if the player actually got a high score
                         FragmentManager fm = getFragmentManager();
@@ -191,7 +197,9 @@ public class GameActivity extends AppCompatActivity {
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //reset click tracking
+                //reset click tracking and music switch
+                myAudioPlayer.stop();
+                mMusicSwitch.setChecked(false);
                 fromEndGame = false;
                 fromTryAgain = false;
                 clicked = 0;
@@ -267,11 +275,11 @@ public class GameActivity extends AppCompatActivity {
                 if(mMusicSwitch.isChecked())
                 {
                     myAudioPlayer.play(getApplicationContext());
-
                 }
 
                 else
                 {
+
                     myAudioPlayer.stop();
                 }
             }
