@@ -33,19 +33,19 @@ public class GameActivity extends AppCompatActivity {
 
     private TableLayout mGameTable;
     private GameCard[][] mCards;
-    static int clicked;
-    static String[] last2Values;
-    static boolean fromTryAgain;
-    static boolean fromEndGame;
+    static int mClicked;
+    static String[] mLast2Values;
+    static boolean mFromTryAgain;
+    static boolean mFromEndGame;
 
     private AudioPlayer myAudioPlayer = new AudioPlayer();
     Switch mMusicSwitch;
 
     private ArrayList<String> mPossibleWords;
 
-    private Button endButton;
-    private Button newGame;
-    private Button tryAgain;
+    private Button mEndButton;
+    private Button mNewGameButton;
+    private Button mTryAgainButton;
 
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
@@ -63,12 +63,12 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //reset click tracking
-        fromEndGame = false;
-        fromTryAgain = false;
-        clicked = 0;
-        last2Values = new String[2];
-        last2Values[0] = "-1";
-        last2Values[1] = "-2";
+        mFromEndGame = false;
+        mFromTryAgain = false;
+        mClicked = 0;
+        mLast2Values = new String[2];
+        mLast2Values[0] = "-1";
+        mLast2Values[1] = "-2";
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
@@ -149,11 +149,17 @@ public class GameActivity extends AppCompatActivity {
         mTestCard.setText(someText);
 
         //end button
-        endButton = (Button) findViewById(R.id.endBtn);
-        endButton.setOnClickListener(new View.OnClickListener() {
+        //waits 5 seconds then opens game over screen
+        mEndButton = (Button) findViewById(R.id.endBtn);
+        Intent gameOverIntent = new Intent(this, GameOverActivity.class);
+        //99 is a dummy score to test passing to game over intent
+        //in practice this would be a variable
+        gameOverIntent.putExtra("user_score", 99);
+        gameOverIntent.putExtra("number_of_pairs", mPairAmount);
+        mEndButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromEndGame = true;
+                mFromEndGame = true;
                 //flip over all unflipped cards
                 for (int i = 0; i < numRows; i++) {
                     for (int j = 0; j < numCols; j++) {
@@ -163,11 +169,11 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
                 //reset click tracking
-                fromEndGame = false;
-                fromTryAgain = false;
-                clicked = 0;
-                last2Values[0] = "-1";
-                last2Values[1] = "-2";
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
                 //timer to wait a few seconds before prompting to save score
                 CountDownTimer timer = new CountDownTimer(5000,1000) {
                     @Override
@@ -180,11 +186,11 @@ public class GameActivity extends AppCompatActivity {
                         //stop music after timer ends
                         myAudioPlayer.stop();
                         mMusicSwitch.setChecked(false);
-                        //alert dialog to prompt for saving to high scores
-                        //in practice would only be called if the player actually got a high score
-                        FragmentManager fm = getFragmentManager();
-                        alertDialogFragment hsPrompt = new alertDialogFragment();
-                        hsPrompt.show(getSupportFragmentManager(), "hsPrompt");
+                        //open game over screen
+                        if (getParent() != null) {
+                            finishFromChild(getParent().getParent());
+                        }
+                        startActivity(gameOverIntent);
                     }
                 };
                 timer.start();
@@ -192,19 +198,19 @@ public class GameActivity extends AppCompatActivity {
         });
         //new game button
         //return to menu screen to choose a new game board
-        newGame = (Button) findViewById(R.id.startBtn);
+        mNewGameButton = (Button) findViewById(R.id.startBtn);
         Intent newGameIntent = new Intent(this, MainActivity.class);
-        newGame.setOnClickListener(new View.OnClickListener() {
+        mNewGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //reset click tracking and music switch
                 myAudioPlayer.stop();
                 mMusicSwitch.setChecked(false);
-                fromEndGame = false;
-                fromTryAgain = false;
-                clicked = 0;
-                last2Values[0] = "-1";
-                last2Values[1] = "-2";
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
                 if (getParent() != null) {
                     finishFromChild(getParent().getParent());
                 }
@@ -212,11 +218,11 @@ public class GameActivity extends AppCompatActivity {
             }
         });
         //try again
-        tryAgain = (Button) findViewById(R.id.startBtn2);
-        tryAgain.setOnClickListener(new View.OnClickListener() {
+        mTryAgainButton = (Button) findViewById(R.id.startBtn2);
+        mTryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromTryAgain = true;
+                mFromTryAgain = true;
                 /*flip over all flipped cards that don't match
                 (not sure if this should count for all flipped cards or just the 2 most recently flipped)
                 (this implementation counts for all flipped cards)
@@ -261,13 +267,13 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }//if (faceUp.size() > 0) {
                 //reset click tracking
-                fromEndGame = false;
-                fromTryAgain = false;
-                clicked = 0;
-                last2Values[0] = "-1";
-                last2Values[1] = "-2";
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
             }//public void onClick(View v) {
-        });//tryAgain.setOnClickListener(new View.OnClickListener() {
+        });//mTryAgainButton.setOnClickListener(new View.OnClickListener() {
 
         mMusicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

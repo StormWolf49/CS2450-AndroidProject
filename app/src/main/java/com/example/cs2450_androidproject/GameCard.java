@@ -63,9 +63,9 @@ public class GameCard extends FrameLayout {
                 // select the animation targets for the animators
                 // the relative "back" of the card may be the card's actual face or back
                 // and the animators have to handle one or the other
-                if (GameActivity.clicked < 2 || GameActivity.fromTryAgain) {
-                    GameActivity.clicked++;
-                    System.out.println(GameActivity.clicked);
+                if (GameActivity.mClicked < 2 || GameActivity.mFromTryAgain) {
+                    GameActivity.mClicked++;
+                    System.out.println(GameActivity.mClicked);
                     if (mFaceDown) {
                         mFrontAnim.setTarget(mCardBack);
                         mBackAnim.setTarget(mCardFront);
@@ -78,27 +78,27 @@ public class GameCard extends FrameLayout {
                     mFrontAnim.start();
                     mBackAnim.start();
                     //save first flipped card value
-                    if (GameActivity.clicked == 1){
-                        GameActivity.last2Values[0] = getText();
+                    if (GameActivity.mClicked == 1){
+                        GameActivity.mLast2Values[0] = getText();
                     }
                     //save second flipped card value
-                    if (GameActivity.clicked == 2){
-                        GameActivity.last2Values[1] = getText();
+                    if (GameActivity.mClicked == 2){
+                        GameActivity.mLast2Values[1] = getText();
                         //check if the 2 card values match
                         //if they match, reset click tracking
                         //if they don't, don't allow any more clicks until they click "try again"
-                        if (checkMatch(GameActivity.last2Values)){
+                        if (checkMatch(GameActivity.mLast2Values)){
                             //reset click tracking
-                            GameActivity.fromEndGame = false;
-                            GameActivity.fromTryAgain = false;
-                            GameActivity.clicked = 0;
-                            GameActivity.last2Values[0] = "-1";
-                            GameActivity.last2Values[1] = "-2";
+                            GameActivity.mFromEndGame = false;
+                            GameActivity.mFromTryAgain = false;
+                            GameActivity.mClicked = 0;
+                            GameActivity.mLast2Values[0] = "-1";
+                            GameActivity.mLast2Values[1] = "-2";
                         }
                     }
                 }
                 //don't count clicks for flipping all cards to end the game
-                else if(GameActivity.fromEndGame){
+                else if(GameActivity.mFromEndGame){
                     if (mFaceDown) {
                         mFrontAnim.setTarget(mCardBack);
                         mBackAnim.setTarget(mCardFront);
