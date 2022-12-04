@@ -15,7 +15,9 @@ import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -35,6 +37,9 @@ public class GameActivity extends AppCompatActivity {
     static String[] last2Values;
     static boolean fromTryAgain;
     static boolean fromEndGame;
+
+    private AudioPlayer myAudioPlayer = new AudioPlayer();
+    Switch mMusicSwitch;
 
     private ArrayList<String> mPossibleWords;
 
@@ -57,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //reset click tracking
         fromEndGame = false;
         fromTryAgain = false;
         clicked = 0;
@@ -72,6 +78,10 @@ public class GameActivity extends AppCompatActivity {
         }
 
         mTestCard = (GameCard) findViewById(R.id.testCard);
+        mMusicSwitch = (Switch) findViewById(R.id.musicSwitch);
+        //reset music switch
+        myAudioPlayer.stop();
+        mMusicSwitch.setChecked(false);
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -167,6 +177,9 @@ public class GameActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
+                        //stop music after timer ends
+                        myAudioPlayer.stop();
+                        mMusicSwitch.setChecked(false);
                         //alert dialog to prompt for saving to high scores
                         //in practice would only be called if the player actually got a high score
                         FragmentManager fm = getFragmentManager();
@@ -184,7 +197,9 @@ public class GameActivity extends AppCompatActivity {
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //reset click tracking
+                //reset click tracking and music switch
+                myAudioPlayer.stop();
+                mMusicSwitch.setChecked(false);
                 fromEndGame = false;
                 fromTryAgain = false;
                 clicked = 0;
@@ -253,6 +268,22 @@ public class GameActivity extends AppCompatActivity {
                 last2Values[1] = "-2";
             }//public void onClick(View v) {
         });//tryAgain.setOnClickListener(new View.OnClickListener() {
+
+        mMusicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mMusicSwitch.isChecked())
+                {
+                    myAudioPlayer.play(getApplicationContext());
+                }
+
+                else
+                {
+
+                    myAudioPlayer.stop();
+                }
+            }
+        });
     }
 }
 

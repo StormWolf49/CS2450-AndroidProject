@@ -33,10 +33,11 @@
     </TableLayout>
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/musicSwitch"
         android:layout_width="89dp"
         android:layout_height="64dp"
         android:layout_marginStart="40dp"
+        android:checked="false"
         android:text="@string/music"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/startBtn2"
@@ -89,7 +90,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
     </com.example.cs2450_androidproject.GameCard>
 
 
