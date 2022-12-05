@@ -3,6 +3,7 @@ package com.example.cs2450_androidproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,17 +58,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
         }
 
-        mListOfHighScores = new ArrayList<HighScoreManager>(8);
-
-        for(int i = 2; i <= 10; i++)
-        {
-            mListOfHighScores.add(new HighScoreManager(LeaderboardActivity.this, i));
-
-            if(mListOfHighScores.get(i-2).getHighScores().size() == 0)
-            {
-                mListOfHighScores.get(i-2).fillWithDummyData();
-            }
-        }
+        initializeListOfHighScores(LeaderboardActivity.this);
 
         mHighScore1 = (TextView) findViewById(R.id.highScore1);
         mHighScore2 = (TextView) findViewById(R.id.highScore2);
@@ -200,6 +191,20 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onPause();
         // If 2 is selected, it is mListOfHighScores.get(0);
         mListOfHighScores.get(mLeaderboardSelect-2).saveHighScores();
+    }
+
+    public static void initializeListOfHighScores(Context c) {
+        mListOfHighScores = new ArrayList<HighScoreManager>(8);
+
+        for(int i = 2; i <= 10; i++)
+        {
+            mListOfHighScores.add(new HighScoreManager(c, i));
+
+            if(mListOfHighScores.get(i-2).getHighScores().size() == 0)
+            {
+                mListOfHighScores.get(i-2).fillWithDummyData();
+            }
+        }
     }
 
     public static ArrayList<HighScoreManager> getListOfHighScores()

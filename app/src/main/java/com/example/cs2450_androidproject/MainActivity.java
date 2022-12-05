@@ -155,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+
+        LeaderboardActivity.initializeListOfHighScores(MainActivity.this);
     }
 
     @Override
