@@ -6,34 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/num_cards_prompt"
-        app:layout_constraintBottom_toTopOf="@+id/cardAmountNumPicker"
-        app:layout_constraintEnd_toEndOf="@+id/startBtn"
-        app:layout_constraintStart_toStartOf="@+id/startBtn" />
-
-    <NumberPicker
-        android:id="@+id/cardAmountNumPicker"
-        android:layout_width="63dp"
-        android:layout_height="109dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/startBtn"
-        app:layout_constraintEnd_toEndOf="@+id/startBtn"
-        app:layout_constraintStart_toStartOf="@+id/startBtn" />
-
     <Button
         android:id="@+id/startBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="172dp"
         android:layout_marginEnd="172dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="108dp"
         android:text="@string/start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/leaderboardBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="172dp"
+        android:layout_marginEnd="172dp"
+        android:layout_marginBottom="44dp"
+        android:text="SCORES"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/num_cards_prompt"
+        app:layout_constraintBottom_toTopOf="@+id/cardAmountNumPicker"
+        app:layout_constraintEnd_toEndOf="@+id/startBtn"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="@+id/startBtn" />
+
+    <NumberPicker
+        android:id="@+id/cardAmountNumPicker"
+        android:layout_width="63dp"
+        android:layout_height="109dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/startBtn"
+        app:layout_constraintEnd_toEndOf="@+id/startBtn"
+        app:layout_constraintStart_toStartOf="@+id/startBtn" />
+
+    <Switch
+        android:id="@+id/debug_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="Debug Mode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

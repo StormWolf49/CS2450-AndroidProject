@@ -63,18 +63,54 @@ public class GameCard extends FrameLayout {
                 // select the animation targets for the animators
                 // the relative "back" of the card may be the card's actual face or back
                 // and the animators have to handle one or the other
-                if(mFaceDown) {
-                    mFrontAnim.setTarget(mCardBack);
-                    mBackAnim.setTarget(mCardFront);
-                    mFaceDown = false;
+                if (GameActivity.mClicked < 2 || GameActivity.mFromTryAgain) {
+                    GameActivity.mClicked++;
+                    System.out.println(GameActivity.mClicked);
+                    if (mFaceDown) {
+                        mFrontAnim.setTarget(mCardBack);
+                        mBackAnim.setTarget(mCardFront);
+                        mFaceDown = false;
+                    } else {
+                        mFrontAnim.setTarget(mCardFront);
+                        mBackAnim.setTarget(mCardBack);
+                        mFaceDown = true;
+                    }
+                    mFrontAnim.start();
+                    mBackAnim.start();
+                    //save first flipped card value
+                    if (GameActivity.mClicked == 1){
+                        GameActivity.mLast2Values[0] = getText();
+                    }
+                    //save second flipped card value
+                    if (GameActivity.mClicked == 2){
+                        GameActivity.mLast2Values[1] = getText();
+                        //check if the 2 card values match
+                        //if they match, reset click tracking
+                        //if they don't, don't allow any more clicks until they click "try again"
+                        if (checkMatch(GameActivity.mLast2Values)){
+                            //reset click tracking
+                            GameActivity.mFromEndGame = false;
+                            GameActivity.mFromTryAgain = false;
+                            GameActivity.mClicked = 0;
+                            GameActivity.mLast2Values[0] = "-1";
+                            GameActivity.mLast2Values[1] = "-2";
+                        }
+                    }
                 }
-                else {
-                    mFrontAnim.setTarget(mCardFront);
-                    mBackAnim.setTarget(mCardBack);
-                    mFaceDown = true;
+                //don't count clicks for flipping all cards to end the game
+                else if(GameActivity.mFromEndGame){
+                    if (mFaceDown) {
+                        mFrontAnim.setTarget(mCardBack);
+                        mBackAnim.setTarget(mCardFront);
+                        mFaceDown = false;
+                    } else {
+                        mFrontAnim.setTarget(mCardFront);
+                        mBackAnim.setTarget(mCardBack);
+                        mFaceDown = true;
+                    }
+                    mFrontAnim.start();
+                    mBackAnim.start();
                 }
-                mFrontAnim.start();
-                mBackAnim.start();
             }
         });
     }
@@ -87,5 +123,12 @@ public class GameCard extends FrameLayout {
 
     public String getText() {
         return mCardText;
+    }
+
+    public boolean checkMatch(String[] values){
+        if (values[0].equals(values[1])){
+            return true;
+        }
+        return false;
     }
 }

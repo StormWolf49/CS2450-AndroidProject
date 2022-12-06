@@ -2,19 +2,30 @@ package com.example.cs2450_androidproject;
 
 import android.app.Activity;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
+import java.util.Timer;
 
 public class GameActivity extends AppCompatActivity {
     private GameCard mTestCard;
@@ -22,8 +33,19 @@ public class GameActivity extends AppCompatActivity {
 
     private TableLayout mGameTable;
     private GameCard[][] mCards;
+    static int mClicked;
+    static String[] mLast2Values;
+    static boolean mFromTryAgain;
+    static boolean mFromEndGame;
+
+    private AudioPlayer myAudioPlayer = new AudioPlayer();
+    Switch mMusicSwitch;
 
     private ArrayList<String> mPossibleWords;
+
+    private Button mEndButton;
+    private Button mNewGameButton;
+    private Button mTryAgainButton;
 
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
@@ -40,6 +62,13 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //reset click tracking
+        mFromEndGame = false;
+        mFromTryAgain = false;
+        mClicked = 0;
+        mLast2Values = new String[2];
+        mLast2Values[0] = "-1";
+        mLast2Values[1] = "-2";
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
@@ -49,6 +78,10 @@ public class GameActivity extends AppCompatActivity {
         }
 
         mTestCard = (GameCard) findViewById(R.id.testCard);
+        mMusicSwitch = (Switch) findViewById(R.id.musicSwitch);
+        //reset music switch
+        myAudioPlayer.stop();
+        mMusicSwitch.setChecked(false);
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -114,6 +147,149 @@ public class GameActivity extends AppCompatActivity {
 
         String someText = "table dimensions: " + numRows + " x " + numCols;
         mTestCard.setText(someText);
+
+        //end button
+        //waits 5 seconds then opens game over screen
+        mEndButton = (Button) findViewById(R.id.endBtn);
+        Intent gameOverIntent = new Intent(this, GameOverActivity.class);
+        //99 is a dummy score to test passing to game over intent
+        //in practice this would be a variable
+        gameOverIntent.putExtra("user_score", 99);
+        gameOverIntent.putExtra("number_of_pairs", mPairAmount);
+        mEndButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFromEndGame = true;
+                //flip over all unflipped cards
+                for (int i = 0; i < numRows; i++) {
+                    for (int j = 0; j < numCols; j++) {
+                        if(mCards[i][j].mFaceDown){
+                            mCards[i][j].mFlipButton.performClick();
+                        }
+                    }
+                }
+                //reset click tracking
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
+                //timer to wait a few seconds before prompting to save score
+                CountDownTimer timer = new CountDownTimer(5000,1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        //doesn't need to do anything but needs to be here for the timer to work
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        //stop music after timer ends
+                        myAudioPlayer.stop();
+                        mMusicSwitch.setChecked(false);
+                        //open game over screen
+                        if (getParent() != null) {
+                            finishFromChild(getParent().getParent());
+                        }
+                        startActivity(gameOverIntent);
+                    }
+                };
+                timer.start();
+            }
+        });
+        //new game button
+        //return to menu screen to choose a new game board
+        mNewGameButton = (Button) findViewById(R.id.startBtn);
+        Intent newGameIntent = new Intent(this, MainActivity.class);
+        mNewGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //reset click tracking and music switch
+                myAudioPlayer.stop();
+                mMusicSwitch.setChecked(false);
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
+                if (getParent() != null) {
+                    finishFromChild(getParent().getParent());
+                }
+                startActivity(newGameIntent);
+            }
+        });
+        //try again
+        mTryAgainButton = (Button) findViewById(R.id.startBtn2);
+        mTryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFromTryAgain = true;
+                /*flip over all flipped cards that don't match
+                (not sure if this should count for all flipped cards or just the 2 most recently flipped)
+                (this implementation counts for all flipped cards)
+                put all face-up card values in an arraylist*/
+                ArrayList<String> faceUp = new ArrayList<String>();
+                for (int i = 0; i < numRows; i++) {
+                    for (int j = 0; j < numCols; j++) {
+                        if (!mCards[i][j].mFaceDown) {
+                            faceUp.add(mCards[i][j].getText());
+                        }
+                    }
+                }
+                if (faceUp.size() > 0) {
+                    //create and populate array to store the values of the face-up cards
+                    //(have to use an arraylist first to know how many cards are face up)
+                    String[] values = new String[faceUp.size()];
+                    for (int i = 0; i < faceUp.size(); i++) {
+                        values[i] = faceUp.get(i);
+                    }
+                    //check for matches
+                    //if a match is found, replace its string in the values array w/ "-1"
+                    //since "-1" shouldn't match any of the card values
+                    for (int i = 0; i < faceUp.size(); i++) {
+                        for (int j = 0; j < faceUp.size(); j++) {
+                            if (values[i].equals(values[j]) && i < j) {
+                                values[i] = "-1";
+                                values[j] = "-1";
+                            }
+                        }
+                    }
+                    //flip unmatched cards
+                    for (int i = 0; i < numRows; i++) {
+                        for (int j = 0; j < numCols; j++) {
+                            for (int r = 0; r < faceUp.size(); r++) {
+                                //if the value of the card matches one of the values in the value array
+                                //that card is not matched and should be flipped back over
+                                if (mCards[i][j].getText().equals(values[r]) && !mCards[i][j].mFaceDown){
+                                    mCards[i][j].mFlipButton.performClick();
+                                }
+                            }
+                        }
+                    }
+                }//if (faceUp.size() > 0) {
+                //reset click tracking
+                mFromEndGame = false;
+                mFromTryAgain = false;
+                mClicked = 0;
+                mLast2Values[0] = "-1";
+                mLast2Values[1] = "-2";
+            }//public void onClick(View v) {
+        });//mTryAgainButton.setOnClickListener(new View.OnClickListener() {
+
+        mMusicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mMusicSwitch.isChecked())
+                {
+                    myAudioPlayer.play(getApplicationContext());
+                }
+
+                else
+                {
+
+                    myAudioPlayer.stop();
+                }
+            }
+        });
     }
 }
 
