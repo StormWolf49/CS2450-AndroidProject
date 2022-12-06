@@ -12,8 +12,8 @@ import java.util.Random;
 
 public class AudioPlayer {
     private MediaPlayer memoryPlayer;
-    private MediaPlayer[] mediaPlayers = new MediaPlayer[4];
-    final int random = new Random().nextInt(4);
+    private MediaPlayer[] mediaPlayers = new MediaPlayer[6];
+    final int random = new Random().nextInt(mediaPlayers.length);
     int currentIndex = random;
     int myCurrentPlayback = 0;
 
@@ -23,6 +23,8 @@ public class AudioPlayer {
         mediaPlayers[1] = MediaPlayer.create(c, R.raw.haven);
         mediaPlayers[2] = MediaPlayer.create(c, R.raw.bruh);
         mediaPlayers[3] = MediaPlayer.create(c,R.raw.dreamscape);
+        mediaPlayers[4] = MediaPlayer.create(c,R.raw.yugioh);
+        mediaPlayers[5] = MediaPlayer.create(c,R.raw.supernova);
 
         return mediaPlayers[currentIndex];
     }
@@ -53,7 +55,7 @@ public class AudioPlayer {
         {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                int newRandom = new Random().nextInt(4);
+                int newRandom = new Random().nextInt(mediaPlayers.length);
                 currentIndex = newRandom;
                 play(c);
             }
