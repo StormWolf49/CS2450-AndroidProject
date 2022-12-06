@@ -19,7 +19,9 @@ public class GameCard extends FrameLayout {
     AnimatorSet mFrontAnim;
     AnimatorSet mBackAnim;
 
-    boolean mFaceDown;
+    boolean mFaceDown; // true when the card is facedown; used for animation
+
+    boolean mMatched; // true if the card has been matched with another
 
     public GameCard(Context context) {
         super(context);
@@ -72,16 +74,16 @@ public class GameCard extends FrameLayout {
                         flipDown();
                     }
                     //save first flipped card value
-                    if (GameActivity.mClicked == 1){
+                    if (GameActivity.mClicked == 1) {
                         GameActivity.mLast2Values[0] = getText();
                     }
                     //save second flipped card value
-                    if (GameActivity.mClicked == 2){
+                    if (GameActivity.mClicked == 2) {
                         GameActivity.mLast2Values[1] = getText();
                         //check if the 2 card values match
                         //if they match, reset click tracking
                         //if they don't, don't allow any more clicks until they click "try again"
-                        if (checkMatch(GameActivity.mLast2Values)){
+                        if (checkMatch(GameActivity.mLast2Values)) {
                             //reset click tracking
                             GameActivity.mFromEndGame = false;
                             GameActivity.mFromTryAgain = false;
@@ -92,7 +94,7 @@ public class GameCard extends FrameLayout {
                     }
                 }
                 //don't count clicks for flipping all cards to end the game
-                else if(GameActivity.mFromEndGame){
+                else if (GameActivity.mFromEndGame) {
                     if (mFaceDown) {
                         mFrontAnim.setTarget(mCardBack);
                         mBackAnim.setTarget(mCardFront);
@@ -112,26 +114,30 @@ public class GameCard extends FrameLayout {
     // the following two functions have been made public to allow other places to easily
     // flip the card up and down
     public void flipUp() {
-        mFrontAnim.setTarget(mCardBack);
-        mBackAnim.setTarget(mCardFront);
+        if (mFaceDown) {
+            mFrontAnim.setTarget(mCardBack);
+            mBackAnim.setTarget(mCardFront);
 
-        mFrontAnim.start();
-        mBackAnim.start();
+            mFrontAnim.start();
+            mBackAnim.start();
 
-        mFaceDown = false;
+            mFaceDown = false;
+        }
     }
 
     public void flipDown() {
-        mFrontAnim.setTarget(mCardFront);
-        mBackAnim.setTarget(mCardBack);
+        if (!mFaceDown) {
+            mFrontAnim.setTarget(mCardFront);
+            mBackAnim.setTarget(mCardBack);
 
-        mFrontAnim.start();
-        mBackAnim.start();
+            mFrontAnim.start();
+            mBackAnim.start();
 
-        mFaceDown = true;
+            mFaceDown = true;
+        }
     }
 
-    // setget functions for the card text:
+    // setget functions
     public void setText(String newText) {
         mCardText = newText;
         mCardFront.setText(newText);
@@ -141,10 +147,22 @@ public class GameCard extends FrameLayout {
         return mCardText;
     }
 
-    public boolean checkMatch(String[] values){
-        if (values[0].equals(values[1])){
+    public void setMatched(boolean newMatched) {
+        this.mMatched = newMatched;
+    }
+
+    public boolean isMatched() {
+        return mMatched;
+    }
+
+    public boolean checkMatch(String[] values) {
+        if (values[0].equals(values[1])) {
             return true;
         }
         return false;
+    }
+
+    public void setOnClickListener(OnClickListener listener) {
+        mFlipButton.setOnClickListener(listener);
     }
 }
