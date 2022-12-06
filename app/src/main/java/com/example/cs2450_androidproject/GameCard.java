@@ -67,16 +67,10 @@ public class GameCard extends FrameLayout {
                     GameActivity.mClicked++;
                     System.out.println(GameActivity.mClicked);
                     if (mFaceDown) {
-                        mFrontAnim.setTarget(mCardBack);
-                        mBackAnim.setTarget(mCardFront);
-                        mFaceDown = false;
+                        flipUp();
                     } else {
-                        mFrontAnim.setTarget(mCardFront);
-                        mBackAnim.setTarget(mCardBack);
-                        mFaceDown = true;
+                        flipDown();
                     }
-                    mFrontAnim.start();
-                    mBackAnim.start();
                     //save first flipped card value
                     if (GameActivity.mClicked == 1){
                         GameActivity.mLast2Values[0] = getText();
@@ -113,6 +107,28 @@ public class GameCard extends FrameLayout {
                 }
             }
         });
+    }
+
+    // the following two functions have been made public to allow other places to easily
+    // flip the card up and down
+    public void flipUp() {
+        mFrontAnim.setTarget(mCardBack);
+        mBackAnim.setTarget(mCardFront);
+
+        mFrontAnim.start();
+        mBackAnim.start();
+
+        mFaceDown = false;
+    }
+
+    public void flipDown() {
+        mFrontAnim.setTarget(mCardFront);
+        mBackAnim.setTarget(mCardBack);
+
+        mFrontAnim.start();
+        mBackAnim.start();
+
+        mFaceDown = true;
     }
 
     // setget functions for the card text:
