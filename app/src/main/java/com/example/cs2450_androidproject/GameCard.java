@@ -19,6 +19,8 @@ public class GameCard extends FrameLayout {
     AnimatorSet mFrontAnim;
     AnimatorSet mBackAnim;
 
+    CardListener listener;
+
     boolean mFaceDown; // true when the card is facedown; used for animation
 
     boolean mMatched; // true if the card has been matched with another
@@ -56,56 +58,13 @@ public class GameCard extends FrameLayout {
         mFrontAnim = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.front_animator);
         mBackAnim = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.back_animator);
 
+
         // button that flips the card when it's flipped
         mFlipButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("GameCard", "flip button clicked");
-
-                // select the animation targets for the animators
-                // the relative "back" of the card may be the card's actual face or back
-                // and the animators have to handle one or the other
-                if (GameActivity.mClicked < 2 || GameActivity.mFromTryAgain) {
-                    GameActivity.mClicked++;
-                    System.out.println(GameActivity.mClicked);
-                    if (mFaceDown) {
-                        flipUp();
-                    } else {
-                        flipDown();
-                    }
-                    //save first flipped card value
-                    if (GameActivity.mClicked == 1) {
-                        GameActivity.mLast2Values[0] = getText();
-                    }
-                    //save second flipped card value
-                    if (GameActivity.mClicked == 2) {
-                        GameActivity.mLast2Values[1] = getText();
-                        //check if the 2 card values match
-                        //if they match, reset click tracking
-                        //if they don't, don't allow any more clicks until they click "try again"
-                        if (checkMatch(GameActivity.mLast2Values)) {
-                            //reset click tracking
-                            GameActivity.mFromEndGame = false;
-                            GameActivity.mFromTryAgain = false;
-                            GameActivity.mClicked = 0;
-                            GameActivity.mLast2Values[0] = "-1";
-                            GameActivity.mLast2Values[1] = "-2";
-                        }
-                    }
-                }
-                //don't count clicks for flipping all cards to end the game
-                else if (GameActivity.mFromEndGame) {
-                    if (mFaceDown) {
-                        mFrontAnim.setTarget(mCardBack);
-                        mBackAnim.setTarget(mCardFront);
-                        mFaceDown = false;
-                    } else {
-                        mFrontAnim.setTarget(mCardFront);
-                        mBackAnim.setTarget(mCardBack);
-                        mFaceDown = true;
-                    }
-                    mFrontAnim.start();
-                    mBackAnim.start();
+                if(listener != null) {
+                    listener.onClick(GameCard.this);
                 }
             }
         });
@@ -162,7 +121,13 @@ public class GameCard extends FrameLayout {
         return false;
     }
 
-    public void setOnClickListener(OnClickListener listener) {
-        mFlipButton.setOnClickListener(listener);
+    public boolean isFaceDown() { return mFaceDown; }
+
+    public void setListener(CardListener listener) {
+        this.listener = listener;
+    }
+
+    public interface CardListener {
+        public void onClick(GameCard card);
     }
 }

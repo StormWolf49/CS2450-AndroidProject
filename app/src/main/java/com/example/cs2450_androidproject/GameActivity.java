@@ -21,13 +21,14 @@ import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Timer;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements GameCard.CardListener {
     private GameCard mTestCard;
     private int mPairAmount;
 
@@ -46,6 +47,10 @@ public class GameActivity extends AppCompatActivity {
     private Button mEndButton;
     private Button mNewGameButton;
     private Button mTryAgainButton;
+
+    private GameCard mSavedCard;
+    private int mScore;
+    private boolean mCanFlipCards; // true if <= 2 unmatched cards are face up
 
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
@@ -82,6 +87,10 @@ public class GameActivity extends AppCompatActivity {
         //reset music switch
         myAudioPlayer.stop();
         mMusicSwitch.setChecked(false);
+
+        mSavedCard = null;
+        mScore = 0;
+        mCanFlipCards = true;
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -140,6 +149,7 @@ public class GameActivity extends AppCompatActivity {
                 // (which is removed, ensuring that the proper number of words is used
                 mCards[row][col].setText(mPossibleWords.remove(rng.nextInt(mPossibleWords.size())));
                 newRow.addView(mCards[row][col]);
+                mCards[row][col].setListener(this);
             }
 
             mGameTable.addView(newRow);
@@ -152,22 +162,19 @@ public class GameActivity extends AppCompatActivity {
         //waits 5 seconds then opens game over screen
         mEndButton = (Button) findViewById(R.id.endBtn);
         Intent gameOverIntent = new Intent(this, GameOverActivity.class);
-        //99 is a dummy score to test passing to game over intent
-        //in practice this would be a variable
-        gameOverIntent.putExtra("user_score", 99);
+        gameOverIntent.putExtra("user_score", mScore);
         gameOverIntent.putExtra("number_of_pairs", mPairAmount);
         mEndButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFromEndGame = true;
                 //flip over all unflipped cards
-                for (int i = 0; i < numRows; i++) {
-                    for (int j = 0; j < numCols; j++) {
-                        if(mCards[i][j].mFaceDown){
-                            mCards[i][j].mFlipButton.performClick();
-                        }
+                for (GameCard[] row: mCards) {
+                    for (GameCard card: row) {
+                        card.flipUp();
                     }
                 }
+
                 //reset click tracking
                 mFromEndGame = false;
                 mFromTryAgain = false;
@@ -222,57 +229,22 @@ public class GameActivity extends AppCompatActivity {
         mTryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFromTryAgain = true;
-                /*flip over all flipped cards that don't match
-                (not sure if this should count for all flipped cards or just the 2 most recently flipped)
-                (this implementation counts for all flipped cards)
-                put all face-up card values in an arraylist*/
-                ArrayList<String> faceUp = new ArrayList<String>();
-                for (int i = 0; i < numRows; i++) {
-                    for (int j = 0; j < numCols; j++) {
-                        if (!mCards[i][j].mFaceDown) {
-                            faceUp.add(mCards[i][j].getText());
+                // if 2 cards have been flipped up:
+                if(!mCanFlipCards) {
+                    // for every card:
+                    for(GameCard[] row: mCards) {
+                        for (GameCard card: row) {
+                            // if the card is unmatched and faceup, flip it back down
+                            if(!card.isMatched() && !card.isFaceDown()) {
+                                card.flipDown();
+                            }
                         }
                     }
+
+                    // and now no cards are face up
+                    mCanFlipCards = true;
                 }
-                if (faceUp.size() > 0) {
-                    //create and populate array to store the values of the face-up cards
-                    //(have to use an arraylist first to know how many cards are face up)
-                    String[] values = new String[faceUp.size()];
-                    for (int i = 0; i < faceUp.size(); i++) {
-                        values[i] = faceUp.get(i);
-                    }
-                    //check for matches
-                    //if a match is found, replace its string in the values array w/ "-1"
-                    //since "-1" shouldn't match any of the card values
-                    for (int i = 0; i < faceUp.size(); i++) {
-                        for (int j = 0; j < faceUp.size(); j++) {
-                            if (values[i].equals(values[j]) && i < j) {
-                                values[i] = "-1";
-                                values[j] = "-1";
-                            }
-                        }
-                    }
-                    //flip unmatched cards
-                    for (int i = 0; i < numRows; i++) {
-                        for (int j = 0; j < numCols; j++) {
-                            for (int r = 0; r < faceUp.size(); r++) {
-                                //if the value of the card matches one of the values in the value array
-                                //that card is not matched and should be flipped back over
-                                if (mCards[i][j].getText().equals(values[r]) && !mCards[i][j].mFaceDown){
-                                    mCards[i][j].mFlipButton.performClick();
-                                }
-                            }
-                        }
-                    }
-                }//if (faceUp.size() > 0) {
-                //reset click tracking
-                mFromEndGame = false;
-                mFromTryAgain = false;
-                mClicked = 0;
-                mLast2Values[0] = "-1";
-                mLast2Values[1] = "-2";
-            }//public void onClick(View v) {
+            }
         });//mTryAgainButton.setOnClickListener(new View.OnClickListener() {
 
         mMusicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -290,6 +262,43 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(GameCard c) {
+        Log.d("GameActivity", "card clicked");
+        // a card can only be flipped over if it hasn't been matched and is face down
+        if(!c.isMatched() && c.isFaceDown() && mCanFlipCards) {
+            Log.d("GameActivity", "card flipped up");
+            c.flipUp();
+
+            // in this case, no cards have already been flipped
+            // afterwards, one card will be flipped up
+            if(mSavedCard == null) {
+                // save the card
+                mSavedCard = c;
+            }
+            // otherwise, one card has been flipped up already and we will now flip up another card
+            // (leaving two cards flipped up)
+            else {
+                // successful match
+                if(mSavedCard.getText().equals(c.getText())) {
+                    mScore += 2; // +2 points for a successful match
+                    mSavedCard.setMatched(true);
+                    c.setMatched(true);
+                }
+
+                // not a match
+                else {
+                    mScore = Math.max(0, mScore - 1); // -1 points for a failed match, never going below zero
+                    mCanFlipCards = false;
+                }
+
+                // remove saved card text
+                mSavedCard = null;
+                Log.d("GameActivity", "current score: " + mScore);
+            }
+        }
     }
 }
 
