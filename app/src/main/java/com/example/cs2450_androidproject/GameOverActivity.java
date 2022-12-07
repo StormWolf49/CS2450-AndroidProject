@@ -51,6 +51,7 @@ public class GameOverActivity extends AppCompatActivity{
             mPairAmount = getIntent().getIntExtra("number_of_pairs", -1);
         }
 
+
         mIsHighScore = LeaderboardActivity.getListOfHighScores().get(mPairAmount-2).checkScore(mUserScore);
         mEndBtn = (Button) findViewById(R.id.checkHighScoreBtn);
 
