@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Random;
 
@@ -45,8 +46,9 @@ public class AudioPlayer {
         }
     }
 
-    public void play(Context c){
+    public void play(Context c) throws IOException {
         memoryPlayer = MediaPlayer.create(c,getSongSelection());
+        memoryPlayer.prepare();
        // memoryPlayer.setLooping(true);
         memoryPlayer.seekTo(myCurrentPlayback);
         memoryPlayer.start();
@@ -55,9 +57,16 @@ public class AudioPlayer {
         {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                memoryPlayer.reset();
                 int newRandom = new Random().nextInt(mySongSelections.length);
                 currentIndex = newRandom;
-                play(c);
+                memoryPlayer = MediaPlayer.create(c,getSongSelection());
+                try {
+                    memoryPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                memoryPlayer.start();
             }
         });
     }
