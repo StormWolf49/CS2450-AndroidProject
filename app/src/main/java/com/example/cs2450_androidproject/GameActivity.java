@@ -52,6 +52,8 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
     private int mScore;
     private boolean mCanFlipCards; // true if <= 2 unmatched cards are face up
 
+    TextView mScoreLabel;
+
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
             "b",
@@ -91,6 +93,9 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
         mSavedCard = null;
         mScore = 0;
         mCanFlipCards = true;
+
+        mScoreLabel = (TextView) findViewById(R.id.scoreDisplay);
+        mScoreLabel.setText("Score:\n0");
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -298,6 +303,7 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
                 Log.d("GameActivity", "current score: " + mScore);
             }
         }
+        mScoreLabel.setText("Score:\n"+mScore);
     }
 }
 
