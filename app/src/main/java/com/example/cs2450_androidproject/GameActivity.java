@@ -23,6 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -257,7 +258,11 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(mMusicSwitch.isChecked())
                 {
-                    myAudioPlayer.play(getApplicationContext());
+                    try {
+                        myAudioPlayer.play(getApplicationContext());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 else
