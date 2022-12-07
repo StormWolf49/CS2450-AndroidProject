@@ -61,11 +61,6 @@ public class AudioPlayer {
                 int newRandom = new Random().nextInt(mySongSelections.length);
                 currentIndex = newRandom;
                 memoryPlayer = MediaPlayer.create(c,getSongSelection());
-                try {
-                    memoryPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 memoryPlayer.start();
             }
         });
