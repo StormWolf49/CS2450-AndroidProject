@@ -12,21 +12,21 @@ import java.util.Random;
 
 public class AudioPlayer {
     private MediaPlayer memoryPlayer;
-    private MediaPlayer[] mediaPlayers = new MediaPlayer[6];
-    final int random = new Random().nextInt(mediaPlayers.length);
+    private int[] mySongSelections = new int[6];
+    final int random = new Random().nextInt(mySongSelections.length);
     int currentIndex = random;
     int myCurrentPlayback = 0;
 
-    private MediaPlayer getSongSelection(Context c)
+    private int getSongSelection()
     {
-        mediaPlayers[0] = MediaPlayer.create(c, R.raw.sweet_kahoot_dreams);
-        mediaPlayers[1] = MediaPlayer.create(c, R.raw.haven);
-        mediaPlayers[2] = MediaPlayer.create(c, R.raw.bruh);
-        mediaPlayers[3] = MediaPlayer.create(c,R.raw.dreamscape);
-        mediaPlayers[4] = MediaPlayer.create(c,R.raw.yugioh);
-        mediaPlayers[5] = MediaPlayer.create(c,R.raw.supernova);
+        mySongSelections[0] = R.raw.sweet_kahoot_dreams;
+        mySongSelections[1] = R.raw.bruh;
+        mySongSelections[2] = R.raw.dreamscape;
+        mySongSelections[3] = R.raw.haven;
+        mySongSelections[4] = R.raw.supernova;
+        mySongSelections[5] = R.raw.yugioh;
 
-        return mediaPlayers[currentIndex];
+        return mySongSelections[currentIndex];
     }
     public void stop() {
         if (memoryPlayer != null)
@@ -47,8 +47,8 @@ public class AudioPlayer {
     }
 
     public void play(Context c){
-        memoryPlayer = getSongSelection(c);
-        // memoryPlayer.setLooping(true);
+        memoryPlayer = MediaPlayer.create(c,getSongSelection());
+       // memoryPlayer.setLooping(true);
         memoryPlayer.seekTo(myCurrentPlayback);
         memoryPlayer.start();
 
@@ -56,7 +56,7 @@ public class AudioPlayer {
         {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                int newRandom = new Random().nextInt(mediaPlayers.length);
+                int newRandom = new Random().nextInt(mySongSelections.length);
                 currentIndex = newRandom;
                 play(c);
             }
