@@ -53,8 +53,6 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
     private int mScore;
     private boolean mCanFlipCards; // true if <= 2 unmatched cards are face up
 
-    TextView mScoreLabel;
-
     public static final String[] POSSIBLE_WORDS = new String[] {
             "a",
             "b",
@@ -94,9 +92,6 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
         mSavedCard = null;
         mScore = 0;
         mCanFlipCards = true;
-
-        mScoreLabel = (TextView) findViewById(R.id.scoreDisplay);
-        mScoreLabel.setText("Score:\n0");
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -168,11 +163,11 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
         //waits 5 seconds then opens game over screen
         mEndButton = (Button) findViewById(R.id.endBtn);
         Intent gameOverIntent = new Intent(this, GameOverActivity.class);
+        gameOverIntent.putExtra("user_score", mScore);
+        gameOverIntent.putExtra("number_of_pairs", mPairAmount);
         mEndButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameOverIntent.putExtra("user_score", mScore);
-                gameOverIntent.putExtra("number_of_pairs", mPairAmount);
                 mFromEndGame = true;
                 //flip over all unflipped cards
                 for (GameCard[] row: mCards) {
@@ -267,6 +262,7 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
 
                 else
                 {
+
                     myAudioPlayer.pause();
                 }
             }
@@ -308,7 +304,6 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
                 Log.d("GameActivity", "current score: " + mScore);
             }
         }
-        mScoreLabel.setText("Score:\n"+mScore);
     }
 }
 

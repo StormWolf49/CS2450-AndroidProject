@@ -48,7 +48,7 @@ public class AudioPlayer {
 
     public void play(Context c) throws IOException {
         memoryPlayer = MediaPlayer.create(c,getSongSelection());
-        memoryPlayer.prepare();
+        //memoryPlayer.prepare();
        // memoryPlayer.setLooping(true);
         memoryPlayer.seekTo(myCurrentPlayback);
         memoryPlayer.start();
