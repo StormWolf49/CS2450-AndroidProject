@@ -19,7 +19,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -36,14 +36,12 @@
 
     <Switch
         android:id="@+id/musicSwitch"
-        android:layout_width="89dp"
+        android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="40dp"
         android:checked="false"
         android:text="@string/music"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/startBtn2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
@@ -94,6 +92,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone"></com.example.cs2450_androidproject.GameCard>
+
+    <TextView
+        android:id="@+id/scoreDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="8dp"
+        android:text="Score:\n0"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/cardTable"
+        app:layout_constraintEnd_toStartOf="@+id/startBtn2"
+        app:layout_constraintStart_toEndOf="@+id/musicSwitch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.325" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
