@@ -1,3 +1,15 @@
+/***************************************************************
+ *  file: LeaderboardActivity.java
+ *  author: M. Tran
+ *  class: CS 2450 – User Interface Design and Programing
+ *
+ *  assignment: Android APP
+ *  date last modified: 12/11/2022
+ *
+ *  purpose: handles Leaderboard screen
+ *
+ ****************************************************************/
+
 package com.example.cs2450_androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,8 +63,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
-        // Variables initialized here
-        // number picker directly copied from MainActivity
+        /**
+         * INITALIZING VARIABLES
+         **/
         if(savedInstanceState == null)
         {
             mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
@@ -84,6 +97,10 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         readThyFile(mListOfHighScores.get(mLeaderboardSelect-2).getHighScores());
 
+        /**
+         * NUMBER PICKER
+         **/
+
         if(mLeaderboardPicker != null) {
             mLeaderboardPicker.setMaxValue(10);
             mLeaderboardPicker.setMinValue(2);
@@ -100,6 +117,10 @@ public class LeaderboardActivity extends AppCompatActivity {
             });
         }
 
+        /**
+         * BACK BUTTON
+         **/
+
         if(mBackFromLeaderBoardBtn != null)
         {
             mBackFromLeaderBoardBtn.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +130,12 @@ public class LeaderboardActivity extends AppCompatActivity {
                 }
             });
         }
+
+        /**
+         * TEST INPUT BUTTON FUNCTIONALITY
+         * Purpose: Debugging high scores, manuelling input a score to test
+         * if the high score system works
+         **/
 
         if(mTestBtn != null)
         {
@@ -172,6 +199,12 @@ public class LeaderboardActivity extends AppCompatActivity {
             });
         }
 
+        /**
+         * CLEAR BUTTON FUNCTIONALITY
+         * Purpose: Debugging high scores, clears high scores and replaces it with
+         * dummy data
+         **/
+
         if(mClearBtn != null)
         {
             mClearBtn.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +218,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
     }
 
+    /** Method: onPause()
+     Purpose: redundant ~ always make sure to save data even when paused
+     **/
     @Override
     public void onPause()
     {
@@ -193,6 +229,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         mListOfHighScores.get(mLeaderboardSelect-2).saveHighScores();
     }
 
+    /** Method: initializeListOfHighScores()
+     Purpose: initialize arraylist in menu screen
+     **/
     public static void initializeListOfHighScores(Context c) {
         mListOfHighScores = new ArrayList<HighScoreManager>(8);
 

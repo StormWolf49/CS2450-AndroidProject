@@ -1,3 +1,15 @@
+/***************************************************************
+ *  file: GameOverActivity.java
+ *  author: M. Tran
+ *  class: CS 2450 – User Interface Design and Programing
+ *
+ *  assignment: Android APP
+ *  date last modified: 12/11/2022
+ *
+ *  purpose: handles game over screen
+ *
+ ****************************************************************/
+
 package com.example.cs2450_androidproject;
 
 import android.app.AlertDialog;
@@ -44,13 +56,15 @@ public class GameOverActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
 
+        /**
+         * INITIALIZING VARIABLES
+         **/
         if(savedInstanceState == null)
         {
             mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
             mUserScore = getIntent().getIntExtra("user_score", 0);
             mPairAmount = getIntent().getIntExtra("number_of_pairs", -1);
         }
-
 
         mIsHighScore = LeaderboardActivity.getListOfHighScores().get(mPairAmount-2).checkScore(mUserScore);
         mEndBtn = (Button) findViewById(R.id.checkHighScoreBtn);
@@ -61,9 +75,17 @@ public class GameOverActivity extends AppCompatActivity{
         mTextCards.setText("Cards: " + mPairAmount*2);
         mTextScore.setText("Score: " + mUserScore);
 
+        /**
+         * END BUTTON
+         * Purpose: ask/do not ask user to put score into leaderboard with initials,
+         * then push them back into the main menu
+         **/
         if(mEndBtn != null)
         {
             mEndBtn.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * Purpose: return menu screen if user score cannot be put into leaderboard
+                 **/
                 @Override
                 public void onClick(View v) {
                     Intent goBackToMenuIntent = new Intent(GameOverActivity.this, MainActivity.class);
@@ -76,6 +98,10 @@ public class GameOverActivity extends AppCompatActivity{
 
             if(mIsHighScore) {
                 mEndBtn.setOnClickListener(new View.OnClickListener() {
+                    /**
+                     * Purpose: ask if the user wants to put their high score into the leaderboard
+                     * or not
+                     **/
                     @Override
                     public void onClick(View view) {
                         Log.d(TAG, "Checking user's score with high scores. . .");
@@ -86,6 +112,9 @@ public class GameOverActivity extends AppCompatActivity{
 
                         // Set up the buttons
                         mAskUser.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            /**
+                             * Purpose: show input for user initials
+                             **/
                             @Override
                             public void onClick(DialogInterface ask_dialog, int which)
                             {
@@ -202,6 +231,10 @@ public class GameOverActivity extends AppCompatActivity{
 
                                 // Set up the buttons
                                 mInputInitials.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    /**
+                                     * Purpose: takes user input (if none it will be replaced by '?')
+                                     * and the score and adds a new HighScore object to the leaderboard
+                                     **/
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Save Score and Initials
@@ -225,6 +258,9 @@ public class GameOverActivity extends AppCompatActivity{
                                     }
                                 });
                                 mInputInitials.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    /**
+                                     * Purpose: return to previous dialog
+                                     **/
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Throw user back
@@ -238,6 +274,10 @@ public class GameOverActivity extends AppCompatActivity{
                             }
                         });
                         mAskUser.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            /**
+                             * Purpose: push them back into the main menu w/o asking for initials
+                             * or adding anything to the leaderboard
+                             **/
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();

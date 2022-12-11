@@ -1,9 +1,21 @@
+/***************************************************************
+ *  file: HighScore.java
+ *  author: M. Tran, Gary Waughan
+ *  class: CS 2450 – User Interface Design and Programing
+ *
+ *  assignment: Android APP
+ *  date last modified: 12/11/2022
+ *
+ *  purpose: object defining a High Score
+ *
+ ****************************************************************/
+
 package com.example.cs2450_androidproject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// From previous implementation from Swing Project by Greg Waughan
+// From previous implementation from Swing Project by Gary Waughan
 public class HighScore {
 
     public static final String JSON_INITIALS = "initials";
@@ -22,6 +34,11 @@ public class HighScore {
         this.mScore = enteredScore;
     }
 
+    /**
+     * Constructor: highScore(JSONObject)
+     * Purpose: Creates highScore object (specific constructor for JSONSerializer),
+     * setting initials and score for object.
+     **/
     public HighScore(JSONObject json) throws JSONException
     {
         this.mInitials = json.getString(JSON_INITIALS);
@@ -71,6 +88,10 @@ public class HighScore {
         return mInitials + " " + scoreFormat;
     }
 
+    /**
+     * Method: toJSON()
+     * Purpose: gets JSONObject for saving file purposes
+     **/
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         json.put(JSON_INITIALS, mInitials);

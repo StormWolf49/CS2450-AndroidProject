@@ -1,3 +1,15 @@
+/***************************************************************
+ *  file: HighScore.java
+ *  author: M. Tran, G. Waughan
+ *  class: CS 2450 – User Interface Design and Programing
+ *
+ *  assignment: Android APP
+ *  date last modified: 12/11/2022
+ *
+ *  purpose: object defining a High Score
+ *
+ ****************************************************************/
+
 package com.example.cs2450_androidproject;
 
 import android.content.Context;
@@ -28,6 +40,10 @@ public class HighScoreManager
     private static HighScoreManager sHighScoreManager;
     private Context mAppContext;
 
+    /**
+     * Constructor: HighScoreManager(Context, int)
+     * Purpose: initialize HighScoreManager for a set of high scores for one type of game
+     **/
     public HighScoreManager(Context appContext, int num)
     {
         mAppContext = appContext;
@@ -42,24 +58,36 @@ public class HighScoreManager
         }
     }
 
+    /**
+     * Method: fillWithDummyData()
+     * Purpose: fills chosen leaderboard with dummy data / empty set of scores
+     **/
     public void fillWithDummyData()
     {
         clearHighScores();
 
-        addHighScore(new HighScore("LOL", fileNum*4 + 4));
-        addHighScore(new HighScore("BOB", fileNum*2 + 2));
-        addHighScore(new HighScore("NOO", fileNum + 1));
-        addHighScore(new HighScore("ABC", 1));
+        addHighScore(new HighScore("ABC", 0));
+        addHighScore(new HighScore("ABC", 0));
+        addHighScore(new HighScore("ABC", 0));
+        addHighScore(new HighScore("ABC", 0));
         addHighScore(new HighScore("ABC", 0));
 
         saveHighScores();
     }
 
+    /**
+     * Method: addHighScore()
+     * Purpose: adds object HighScore to an array list
+     **/
     public void addHighScore(HighScore s)
     {
         mHighScores.add(s);
     }
 
+    /**
+     * Method: checkScore()
+     * Purpose: checks if the score can be put on the leaderboard
+     **/
     public boolean checkScore(int s)
     {
         for(int n = 0; n < mHighScores.size(); n++)
@@ -73,6 +101,10 @@ public class HighScoreManager
         return false;
     }
 
+    /**
+     * Method: addHighScore()
+     * Purpose: adds score + initials to new Highscore object to an array list + saves to file
+     **/
     public void addHighScore(int s, String initials)
     {
         //goes through highScore ArrayList (redundancy for inquiryForUser method).
@@ -92,16 +124,28 @@ public class HighScoreManager
         Log.d(TAG, "Successfully inputted score.");
     }
 
+    /**
+     * Method: clearHighScores()
+     * Purpose: clears arraylist of high scores
+     **/
     public void clearHighScores()
     {
         mHighScores.clear();
     }
 
+    /**
+     * Method: getHighScores()
+     * Purpose: returns array list of high scores
+     **/
     public ArrayList<HighScore> getHighScores()
     {
         return mHighScores;
     }
 
+    /**
+     * Method: saveHighScores()
+     * Purpose: saves array list of high scores to file(s) using LeaderboardIntentJSONSerializer
+     **/
     public boolean saveHighScores()
     {
         try {

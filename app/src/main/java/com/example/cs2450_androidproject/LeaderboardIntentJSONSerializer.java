@@ -1,3 +1,15 @@
+/***************************************************************
+ *  file: LeaderboardIntentJSONSerializer.java
+ *  author: M. Tran
+ *  class: CS 2450 – User Interface Design and Programing
+ *
+ *  assignment: Android APP
+ *  date last modified: 12/11/2022
+ *
+ *  purpose: handles saving high scores to files
+ *
+ ****************************************************************/
+
 package com.example.cs2450_androidproject;
 
 import android.content.Context;
@@ -21,11 +33,19 @@ public class LeaderboardIntentJSONSerializer
     private Context mContext;
     private String mFilename;
 
+    /**
+     * Constructor: LeaderboardIntentJSONSerializer(Context, String)
+     * Purpose: intialize JSONSerializer for HighScoreManager to be able to save high scores
+     **/
     public LeaderboardIntentJSONSerializer(Context c, String f){
         mContext = c;
         mFilename = f;
     }
 
+    /**
+     * Method: saveScores(ArrayList<HighScore>)
+     * Purpose: save high scores to files
+     **/
     public void saveScores(ArrayList<HighScore> scores) throws JSONException, IOException
     {
         // Build an array in JSON
@@ -51,6 +71,10 @@ public class LeaderboardIntentJSONSerializer
         }
     }
 
+    /**
+     * Method: loadHighScores()
+     * Purpose: returns ArrayList<HighScore> after saving scores
+     **/
     public ArrayList<HighScore> loadHighScores() throws IOException, JSONException {
         ArrayList<HighScore> scores = new ArrayList<HighScore>();
         BufferedReader reader = null;

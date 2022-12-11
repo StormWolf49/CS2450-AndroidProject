@@ -53,19 +53,20 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
     private int mScore;
     private boolean mCanFlipCards; // true if <= 2 unmatched cards are face up
 
-    TextView mScoreLabel;
+    private TextView mScoreLabel;
+    private TextView mTimerLabel;
 
     public static final String[] POSSIBLE_WORDS = new String[] {
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j"
+            "alpha",
+            "beautiful",
+            "crusty crab",
+            "dipper",
+            "elephant",
+            "frisky",
+            "goofy goober",
+            "hello world",
+            "internet",
+            "peanut butter"
     };
 
     @Override
@@ -97,6 +98,8 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
 
         mScoreLabel = (TextView) findViewById(R.id.scoreDisplay);
         mScoreLabel.setText("Score:\n0");
+
+        mTimerLabel = (TextView) findViewById(R.id.timer);
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -181,6 +184,12 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
                     }
                 }
 
+                //hides other functions when ending game
+                mNewGameButton.setVisibility(View.INVISIBLE);
+                mMusicSwitch.setVisibility(View.INVISIBLE);
+                mTryAgainButton.setVisibility(View.INVISIBLE);
+                mEndButton.setVisibility(View.INVISIBLE);
+
                 //reset click tracking
                 mFromEndGame = false;
                 mFromTryAgain = false;
@@ -188,10 +197,14 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
                 mLast2Values[0] = "-1";
                 mLast2Values[1] = "-2";
                 //timer to wait a few seconds before prompting to save score
-                CountDownTimer timer = new CountDownTimer(5000,1000) {
+                CountDownTimer timer = new CountDownTimer(5000,100) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         //doesn't need to do anything but needs to be here for the timer to work
+                        double time = (double) millisUntilFinished / 1000;
+                        String text = String.format("%.1f", time);
+
+                        mTimerLabel.setText(text);
                     }
 
                     @Override
