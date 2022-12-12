@@ -99,7 +99,7 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
         mScoreLabel = (TextView) findViewById(R.id.scoreDisplay);
         mScoreLabel.setText("Score:\n0");
 
-        mTimerLabel = (TextView) findViewById(R.id.timer);
+//        mTimerLabel = (TextView) findViewById(R.id.timer);
 
         Random rng = new Random(); // random number generator to be used in word gen
         // create possible words array
@@ -197,14 +197,10 @@ public class GameActivity extends AppCompatActivity implements GameCard.CardList
                 mLast2Values[0] = "-1";
                 mLast2Values[1] = "-2";
                 //timer to wait a few seconds before prompting to save score
-                CountDownTimer timer = new CountDownTimer(5000,100) {
+                CountDownTimer timer = new CountDownTimer(1500,1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         //doesn't need to do anything but needs to be here for the timer to work
-                        double time = (double) millisUntilFinished / 1000;
-                        String text = String.format("%.1f", time);
-
-                        mTimerLabel.setText(text);
                     }
 
                     @Override
