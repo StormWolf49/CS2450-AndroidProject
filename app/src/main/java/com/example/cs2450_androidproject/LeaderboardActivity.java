@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -63,13 +64,29 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
+        initialize();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_leaderboard);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            setContentView(R.layout.activity_leaderboard);
+        }
+
+        initialize();
+    }
+
+    private void initialize()
+    {
         /**
          * INITALIZING VARIABLES
          **/
-        if(savedInstanceState == null)
-        {
-            mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
-        }
+        mInDebugMode = getIntent().getBooleanExtra("debug_mode", false);
 
         initializeListOfHighScores(LeaderboardActivity.this);
 
